@@ -1,0 +1,17 @@
+# semgrep.yml (optional customizations)
+rules:
+  - id: express-cors-wildcard
+    message: "Avoid wildcard CORS in production; use allowlist."
+    severity: WARNING
+    patterns:
+      - pattern: cors($CFG)
+      - pattern-not: cors({ origin: [$...] })
+    languages: [javascript, typescript]
+
+  - id: jwt-alg-none
+    message: "Disallow 'none' alg for JWT verification."
+    severity: ERROR
+    patterns:
+      - pattern: jwt.verify($TOKEN, $KEY, $OPTS)
+      - pattern-not: jwt.verify($TOKEN, $KEY, { algorithms: ["HS256"] })
+    languages: [javascript, typescript]
